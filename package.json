@@ -1,0 +1,35 @@
+{
+  "name": "polylock",
+  "version": "1.0.0",
+  "license": "MIT",
+  "author": {
+    "name": "Michael Wright",
+    "email": "mjw@methodanalysis.com"
+  },
+  "description": "polylock (multiple resource locking)",
+  "devDependencies": {
+    "babel-preset-es2015": "^6.24.1",
+    "grunt": "^1.0.1",
+    "grunt-babel": "^6.0.0",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-jshint": "^1.1.0",
+    "grunt-contrib-uglify": "^3.0.1",
+    "grunt-karma": "^2.0.0",
+    "jasmine-core": "^2.6.4",
+    "jasmine-es6-promise-matchers": "^2.0.2",
+    "karma": "^1.7.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-coverage": "^1.1.1",
+    "karma-jasmine": "^1.1.0",
+    "karma-spec-reporter": "0.0.31",
+    "load-grunt-tasks": "^3.5.2"
+  },
+  "url": "https://github.com/mwri/polylock",
+  "os": [
+    "linux"
+  ],
+  "private": true,
+  "scripts": {
+    "test": "grunt test"
+  }
+}
