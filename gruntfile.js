@@ -83,6 +83,32 @@ module.exports = function(grunt) {
 					concurrency: Infinity,
 				},
 			},
+			travis_ci_build: {
+				options: {
+					files: [
+						'node_modules/jasmine-es6-promise-matchers/jasmine-es6-promise-matchers.js',
+						'dist/polylock.min.js',
+						'test/**/*.js',
+					],
+					basePath:    '',
+					urlRoot:     '/',
+					frameworks:  ['jasmine'],
+					port:        9876,
+					colors:      true,
+					autoWatch:   false,
+					interval:    200,
+					singleRun:   true,
+					browsers:    ['ChromeTravisCI'],
+					reporters:     ['spec'],
+					concurrency: Infinity,
+					customLaunchers: {
+						ChromeTravisCI: {
+							base:  'Chrome',
+							flags: ['--no-sandbox']
+						}
+					},
+				},
+			},
 		},
 
 		babel: {
@@ -100,6 +126,7 @@ module.exports = function(grunt) {
 
 	grunt.registerTask('dev', ['karma:dev']);
 	grunt.registerTask('build', ['jshint', 'concat', 'babel', 'uglify', 'karma:build']);
+	grunt.registerTask('travis_ci_build', ['jshint', 'concat', 'babel', 'uglify', 'karma:travis_ci_build']);
 
 	grunt.registerTask('default', ['build']);
 	grunt.registerTask('test',    ['build']);

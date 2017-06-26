@@ -1,4 +1,4 @@
-# polylock
+# polylock [![Build Status](https://travis-ci.org/mwri/polylock.svg?branch=master)](https://travis-ci.org/mwri/polylock)
 
 Polylock is a resource locking library that allows asynchronous
 code to be run as soon as locking conditions are met.
