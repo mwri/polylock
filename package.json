@@ -28,8 +28,23 @@
   "os": [
     "linux"
   ],
-  "private": true,
   "scripts": {
     "test": "grunt test"
-  }
+  },
+  "main": "src/polylock.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mwri/polylock.git"
+  },
+  "keywords": [
+    "lock"
+  ],
+  "bugs": {
+    "url": "https://github.com/mwri/polylock/issues"
+  },
+  "homepage": "https://github.com/mwri/polylock#readme"
 }
