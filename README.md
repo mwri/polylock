@@ -23,13 +23,24 @@ Because an operation may be asynchronous it is passed a `done` function
 which it calls to finish, optionally passing a result (here a timeout
 is employed to contrive an asynchronous process of some sort).
 
+The operation is passed a `fail` function too, which may optionally be
+used to handle asynchronous failures.
+
 ```javascript
 let resource_manager = new polylock();
 
-let prom = resource_manager.exec(function (done) {
+let prom = resource_manager.exec(function (done, fail) {
     // locks have been granted
     console.log("starting operation");
+    if (true === false) {
+        // this is a (synchronous) bug in the operation
+        throw new Error('tarantula');
+    }
     setTimeout(function () {
+        if (true === false) {
+            // this is an asynchronous bug in the operation
+            fail(new Error('hornet'));
+        }
         let retval = Math.floor(Math.random()*10);
         console.log("finishing operation (returning "+retval+")");
         // finish the operation
