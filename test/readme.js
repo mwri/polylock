@@ -1,3 +1,18 @@
+(function () {
+
+
+"use strict";
+
+
+let polylock;
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+	polylock = require('./../dist/polylock.js');
+	require('chai-jasmine');
+} else {
+	polylock = window.polylock;
+}
+
+
 describe('readme', function() {
 
 	it('works', function (test_done) {
@@ -103,3 +118,6 @@ describe('readme', function() {
 	});
 
 });
+
+
+})();

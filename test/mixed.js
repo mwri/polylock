@@ -1,3 +1,18 @@
+(function () {
+
+
+"use strict";
+
+
+let polylock;
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+	polylock = require('./../dist/polylock.js');
+	require('chai-jasmine');
+} else {
+	polylock = window.polylock;
+}
+
+
 describe('200 contended mixed operations', function() {
 
 	let db   = new polylock();
@@ -67,3 +82,6 @@ describe('200 contended mixed operations', function() {
 	});
 
 });
+
+
+})();

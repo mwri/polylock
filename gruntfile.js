@@ -8,12 +8,18 @@ module.exports = function(grunt) {
 
 		concat: {
 			options: {
-				separator: '\n\n'
+				separator: '\n\n',
+				stripBanners: { line: true },
+				banner: '// Package: <%= pkg.name %> v<%= pkg.version %> (built <%= grunt.template.today("yyyy-mm-dd HH:MM:ss") %>)\n// Copyright: (C) 2017 <%= pkg.author.name %> <<%= pkg.author.email %>>\n// License: <%= pkg.license %>\n\n\n',
 			},
-			build: {
-				src: ['src/**/*.js'],
-				dest: 'dist/<%= pkg.name %>.js'
-			}
+			es5: {
+				src: ['lib/**/*.js'],
+				dest: 'dist/<%= pkg.name %>_es5.js',
+			},
+			es6: {
+				src: ['lib/**/*.js'],
+				dest: 'dist/<%= pkg.name %>.js',
+			},
 		},
 
 		uglify: {
@@ -22,13 +28,13 @@ module.exports = function(grunt) {
 			},
 			build: {
 				files: {
-					'dist/<%= pkg.name %>.min.js': ['<%= concat.build.dest %>']
-				}
-			}
+					'dist/<%= pkg.name %>_es5.min.js': ['<%= concat.es5.dest %>']
+				},
+			},
 		},
 
 		jshint: {
-			files: ['gruntfile.js', 'src/**/*.js', 'test/**/*.js'],
+			files: ['gruntfile.js', 'lib/**/*.js', 'test/**/*.js'],
 			options: {
 				esversion: 6,
 				laxbreak: true,
@@ -36,38 +42,16 @@ module.exports = function(grunt) {
 					jQuery:   true,
 					console:  true,
 					module:   true,
-					document: true
-				}
-			}
+					document: true,
+				},
+			},
 		},
 
 		karma: {
-			dev: {
+			es5: {
 				options: {
 					files: [
-						'node_modules/jasmine-es6-promise-matchers/jasmine-es6-promise-matchers.js',
-						'src/polylock.js',
-						'test/**/*.js'
-					],
-					basePath:      '',
-					urlRoot:       '/',
-					frameworks:    ['jasmine'],
-					port:          9876,
-					colors:        true,
-					autoWatch:     true,
-					interval:      200,
-					singleRun:     false,
-					browsers:      ['ChromeHeadless'],
-					reporters:     ['spec', 'coverage'],
-					preprocessors: { 'src/polylock.js': ['coverage'] },
-					concurrency:   Infinity,
-				},
-			},
-			build: {
-				options: {
-					files: [
-						'node_modules/jasmine-es6-promise-matchers/jasmine-es6-promise-matchers.js',
-						'dist/polylock.min.js',
+						'dist/polylock_es5.min.js',
 						'test/**/*.js',
 					],
 					basePath:    '',
@@ -79,15 +63,38 @@ module.exports = function(grunt) {
 					interval:    200,
 					singleRun:   true,
 					browsers:    ['ChromeHeadless'],
-					reporters:   ['spec'],
+					reporters:     ['spec'],
 					concurrency: Infinity,
 				},
 			},
-			travis_ci_build: {
+			es6: {
 				options: {
 					files: [
-						'node_modules/jasmine-es6-promise-matchers/jasmine-es6-promise-matchers.js',
-						'dist/polylock.min.js',
+						'dist/polylock.js',
+						'test/**/*.js',
+					],
+					basePath:    '',
+					urlRoot:     '/',
+					frameworks:  ['jasmine'],
+					port:        9876,
+					colors:      true,
+					autoWatch:   false,
+					interval:    200,
+					singleRun:   true,
+					browsers:    ['ChromeHeadless'],
+					reporters:     ['spec', 'coverage'],
+					preprocessors: { 'dist/polylock.js': ['coverage'] },
+					concurrency: Infinity,
+					coverageReporter: {
+						type : 'lcov',
+						subdir: 'karma/',
+					},
+				},
+			},
+			travis_ci_es5: {
+				options: {
+					files: [
+						'dist/polylock_es5.min.js',
 						'test/**/*.js',
 					],
 					basePath:    '',
@@ -109,6 +116,60 @@ module.exports = function(grunt) {
 					},
 				},
 			},
+			travis_ci_es6: {
+				options: {
+					files: [
+						'dist/polylock.js',
+						'test/**/*.js',
+					],
+					basePath:    '',
+					urlRoot:     '/',
+					frameworks:  ['jasmine'],
+					port:        9876,
+					colors:      true,
+					autoWatch:   false,
+					interval:    200,
+					singleRun:   true,
+					browsers:    ['ChromeTravisCI'],
+					reporters:     ['spec', 'coverage'],
+					preprocessors: { 'dist/polylock.js': ['coverage'] },
+					concurrency: Infinity,
+					coverageReporter: {
+						type:   'lcovonly',
+						file:   'lcov.info',
+						subdir: 'karma/',
+					},
+					customLaunchers: {
+						ChromeTravisCI: {
+							base:  'Chrome',
+							flags: ['--no-sandbox']
+						},
+					},
+				},
+			},
+		},
+
+		node_mocha: {
+			es6: {
+				src : ['test/**/*.js'],
+				options : {
+					slow: 3000,
+					timeout: 5000,
+					reportFormats : ['lcov'],
+					coverageFolder: 'coverage/node/',
+					runCoverage : true,
+				},
+			},
+			travis_ci_es6: {
+				src : ['test/**/*.js'],
+				options : {
+					slow: 3000,
+					timeout: 5000,
+					reportFormats : ['lcovonly'],
+					coverageFolder: 'coverage/node/',
+					runCoverage : true,
+				},
+			},
 		},
 
 		babel: {
@@ -117,16 +178,55 @@ module.exports = function(grunt) {
 			},
 			build: {
 				files: {
-					'dist/polylock.js': 'dist/polylock.js',
+					'dist/polylock_es5.js': 'dist/polylock_es5.js',
 				},
+			},
+		},
+
+		lcovMerge: {
+			emitters: 'coverage/*/lcov.info',
+			options: {
+				outputFile: 'coverage/lcov.info',
+			},
+		},
+
+		watch: {
+			scripts: {
+				options: {
+					spawn: true,
+				},
+				files: [
+					'lib/**/*.js',
+					'test/**/*.js',
+				],
+				tasks: ['build'],
 			},
 		},
 
 	});
 
-	grunt.registerTask('dev', ['karma:dev']);
-	grunt.registerTask('build', ['jshint', 'concat', 'babel', 'uglify', 'karma:build']);
-	grunt.registerTask('travis_ci_build', ['jshint', 'concat', 'babel', 'uglify', 'karma:travis_ci_build']);
+	grunt.registerTask('build', [
+		'jshint',
+		'concat:es5',
+		'concat:es6',
+		'babel',
+		'uglify',
+		'karma:es5',
+		'karma:es6',
+		'node_mocha:es6',
+		]);
+
+	grunt.registerTask('travis_ci_build', [
+		'jshint',
+		'concat:es5',
+		'concat:es6',
+		'babel',
+		'uglify',
+		'karma:travis_ci_es5',
+		'karma:travis_ci_es6',
+		'node_mocha:travis_ci_es6',
+		'lcovMerge',
+		]);
 
 	grunt.registerTask('default', ['build']);
 	grunt.registerTask('test',    ['build']);

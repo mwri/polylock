@@ -1,3 +1,18 @@
+(function () {
+
+
+"use strict";
+
+
+let polylock;
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+	polylock = require('./../dist/polylock.js');
+	require('chai-jasmine');
+} else {
+	polylock = window.polylock;
+}
+
+
 describe('operations with read vs write priority (read draining for write)', function() {
 
 	let plan = [];
@@ -113,3 +128,6 @@ describe('operations with read vs write priority (read draining for write)', fun
 	}
 
 });
+
+
+})();

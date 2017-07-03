@@ -1,3 +1,18 @@
+(function () {
+
+
+"use strict";
+
+
+let polylock;
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+	polylock = require('./../dist/polylock.js');
+	require('chai-jasmine');
+} else {
+	polylock = window.polylock;
+}
+
+
 let db = new polylock();
 
 describe('non function operation', function() {
@@ -6,7 +21,11 @@ describe('non function operation', function() {
 
 		let op_prom = db.exec(5, {});
 
-		expect(op_prom).toBeRejected(done);
+		op_prom.then(function () {
+			done.fail('promise resolved; expected rejection');
+		}).catch(function () {
+			done();
+		});
 
 	});
 
@@ -22,7 +41,11 @@ describe('operation throwing error object', function() {
 			throw err;
 		}, {});
 
-		expect(op_prom).toBeRejected(done);
+		op_prom.then(function () {
+			done.fail('promise resolved; expected rejection');
+		}).catch(function () {
+			done();
+		});
 
 	});
 
@@ -38,7 +61,11 @@ describe('operation calling the rejection callback with an error object', functi
 			rej(err);
 		});
 
-		expect(op_prom).toBeRejected(done);
+		op_prom.then(function () {
+			done.fail('promise resolved; expected rejection');
+		}).catch(function () {
+			done();
+		});
 
 	});
 
@@ -54,7 +81,11 @@ describe('operation throwing error string', function() {
 			throw err;
 		}, {});
 
-		expect(op_prom).toBeRejected(done);
+		op_prom.then(function () {
+			done.fail('promise resolved; expected rejection');
+		}).catch(function () {
+			done();
+		});
 
 	});
 
@@ -70,7 +101,11 @@ describe('operation calling the rejection callback with an error object', functi
 			rej(err);
 		}, {});
 
-		expect(op_prom).toBeRejected(done);
+		op_prom.then(function () {
+			done.fail('promise resolved; expected rejection');
+		}).catch(function () {
+			done();
+		});
 
 	});
 
@@ -84,8 +119,15 @@ describe('operation crashing', function() {
 			fff(10/0);
 		}, {});
 
-		expect(op_prom).toBeRejected(done);
+		op_prom.then(function () {
+			done.fail('promise resolved; expected rejection');
+		}).catch(function () {
+			done();
+		});
 
 	});
 
 });
+
+
+})();

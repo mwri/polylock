@@ -1,3 +1,18 @@
+(function () {
+
+
+"use strict";
+
+
+let polylock;
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+	polylock = require('./../dist/polylock.js');
+	require('chai-jasmine');
+} else {
+	polylock = window.polylock;
+}
+
+
 describe('uncontended read', function() {
 
 	let db = new polylock();
@@ -10,7 +25,12 @@ describe('uncontended read', function() {
 			fff(retval);
 		}, {});
 
-		expect(op_prom).toBeResolvedWith(retval, done);
+		op_prom.then(function (resolve_val) {
+			expect(resolve_val).toBe(retval);
+			done();
+		}).catch(function (err) {
+			done.fail(err);
+		});
 
 	});
 
@@ -22,7 +42,12 @@ describe('uncontended read', function() {
 			fff(retval);
 		}, {resource: 'read'});
 
-		expect(op_prom).toBeResolvedWith(retval, done);
+		op_prom.then(function (resolve_val) {
+			expect(resolve_val).toBe(retval);
+			done();
+		}).catch(function (err) {
+			done.fail(err);
+		});
 
 	});
 
@@ -40,7 +65,12 @@ describe('uncontended write', function() {
 			fff(retval);
 		}, {resource: 'write'});
 
-		expect(op_prom).toBeResolvedWith(retval, done);
+		op_prom.then(function (resolve_val) {
+			expect(resolve_val).toBe(retval);
+			done();
+		}).catch(function (err) {
+			done.fail(err);
+		});
 
 	});
 
@@ -52,8 +82,16 @@ describe('uncontended write', function() {
 			fff(retval);
 		}, {resource: 'write'});
 
-		expect(op_prom).toBeResolvedWith(retval, done);
+		op_prom.then(function (resolve_val) {
+			expect(resolve_val).toBe(retval);
+			done();
+		}).catch(function (err) {
+			done.fail(err);
+		});
 
 	});
 
 });
+
+
+})();

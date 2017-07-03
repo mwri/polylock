@@ -1,4 +1,4 @@
-# polylock [![Build Status](https://travis-ci.org/mwri/polylock.svg?branch=master)](https://travis-ci.org/mwri/polylock)
+# polylock [![Build Status](https://travis-ci.org/mwri/polylock.svg?branch=master)](https://travis-ci.org/mwri/polylock) [![Coverage Status](https://coveralls.io/repos/github/mwri/polylock/badge.svg?branch=master)](https://coveralls.io/github/mwri/polylock?branch=master)
 
 Polylock is a resource locking library that allows asynchronous
 code to be run as soon as locking conditions are met.
@@ -27,6 +27,8 @@ The operation is passed a `fail` function too, which may optionally be
 used to handle asynchronous failures.
 
 ```javascript
+let polylock = require('polylock');
+
 let resource_manager = new polylock();
 
 let prom = resource_manager.exec(function (done, fail) {
@@ -59,6 +61,21 @@ prom.then(function (val) {
 Whilst this operation is in progress other operations that require a
 **resource_a** read lock may run, but none that require a read or write
 lock for **resource_b**.
+
+## Client side usage
+
+The module works client side as well, the example above, without the
+`let polylock = require('polylock');` will work in a web browser fine.
+
+## ES5, ES6 and minification
+
+The `dist` folder has the following files available:
+
+File | Description
+:-- | :--
+polylock.js | Limited ES6 features (works with Node.js v4+ and most browsers)
+polylock_es5.js | ES5 translation (should work with anything)
+polylock_es5.min.js | Minified ES5 translation
 
 ## Resource contention
 
@@ -114,5 +131,5 @@ run `npm install` to install the dev/build dependencies, and
 This will create ES5 `dist/polylock.js` and `dist/polylock.min.js`
 files, and run the unit tests against them.
 
-Running `grunt dev` will invoke a continuous file watch and test
-cycle against the (ES6) source, and generate coverage reports.
+Running `grunt watch` will invoke a continuous file watch build test
+cycle and generate (ES6) coverage reports.

@@ -1,3 +1,18 @@
+(function () {
+
+
+"use strict";
+
+
+let polylock;
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+	polylock = require('./../dist/polylock.js');
+	require('chai-jasmine');
+} else {
+	polylock = window.polylock;
+}
+
+
 describe('100 contended read operations', function() {
 
 	let db   = new polylock();
@@ -20,10 +35,13 @@ describe('100 contended read operations', function() {
 			mk_timed_op();
 		}
 
-		Promise.all(results).then(function () {
-			for (let i = 0; i < 5; i++) {
-				expect(results[i]).toBeResolvedWith(10, done);
+		Promise.all(results).then(function (resolved_results) {
+			for (let i = 0; i < 100; i++) {
+				expect(resolved_results[i]).toBe(10);
 			}
+			done();
+		}).catch(function (err) {
+			done.fail(err);
 		});
 
 	});
@@ -61,3 +79,6 @@ describe('100 contended read operations', function() {
 	});
 
 });
+
+
+})();

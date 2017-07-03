@@ -1,3 +1,18 @@
+(function () {
+
+
+"use strict";
+
+
+let polylock;
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+	polylock = require('./../dist/polylock.js');
+	require('chai-jasmine');
+} else {
+	polylock = window.polylock;
+}
+
+
 let seq = [];
 
 function queue_op (db, name, locks, delay) {
@@ -324,3 +339,6 @@ function add_test (descr, test_fun, db) {
 		test_fun(done, db);
 	});
 }
+
+
+})();

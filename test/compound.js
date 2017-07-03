@@ -1,3 +1,18 @@
+(function () {
+
+
+"use strict";
+
+
+let polylock;
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+	polylock = require('./../dist/polylock.js');
+	require('chai-jasmine');
+} else {
+	polylock = window.polylock;
+}
+
+
 // set number of operations to execute over what period (ms)
 let numof_ops     = 800;
 let queue_window  = 1000;
@@ -216,3 +231,6 @@ describe(numof_ops+' mixed compound (three resources) contended operations', fun
 	}
 
 });
+
+
+})();
