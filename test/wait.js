@@ -13,7 +13,7 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
 }
 
 
-describe('uncontended read', function() {
+describe('wait read', function() {
 
 	let db = new polylock();
 
@@ -21,11 +21,10 @@ describe('uncontended read', function() {
 
 		let retval = 4365;
 
-		let op_prom = db.exec(function (fff) {
-			fff(retval);
-		}, {resource: 'read'});
-
-		op_prom.then(function (resolve_val) {
+		db.wait({resource: 'read'}).then(function (release) {
+			release();
+			return retval;
+		}).then(function (resolve_val) {
 			expect(resolve_val).toBe(retval);
 			done();
 		}).catch(function (err) {
@@ -38,11 +37,10 @@ describe('uncontended read', function() {
 
 		let retval = 3654;
 
-		let op_prom = db.exec(function (fff) {
-			fff(retval);
-		}, {resource: 'read'});
-
-		op_prom.then(function (resolve_val) {
+		db.wait({resource: 'read'}).then(function (release) {
+			release();
+			return retval;
+		}).then(function (resolve_val) {
 			expect(resolve_val).toBe(retval);
 			done();
 		}).catch(function (err) {
@@ -53,7 +51,7 @@ describe('uncontended read', function() {
 
 });
 
-describe('uncontended write', function() {
+describe('wait write', function() {
 
 	let db = new polylock();
 
@@ -61,11 +59,10 @@ describe('uncontended write', function() {
 
 		let retval = 4356;
 
-		let op_prom = db.exec(function (fff) {
-			fff(retval);
-		}, {resource: 'write'});
-
-		op_prom.then(function (resolve_val) {
+		db.wait({resource: 'write'}).then(function (release) {
+			release();
+			return retval;
+		}).then(function (resolve_val) {
 			expect(resolve_val).toBe(retval);
 			done();
 		}).catch(function (err) {
@@ -78,11 +75,10 @@ describe('uncontended write', function() {
 
 		let retval = 5436;
 
-		let op_prom = db.exec(function (fff) {
-			fff(retval);
-		}, {resource: 'write'});
-
-		op_prom.then(function (resolve_val) {
+		db.wait({resource: 'write'}).then(function (release) {
+			release();
+			return retval;
+		}).then(function (resolve_val) {
 			expect(resolve_val).toBe(retval);
 			done();
 		}).catch(function (err) {

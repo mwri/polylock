@@ -77,6 +77,67 @@ let prom = resource_manager.exec(function () {
 }, {'resource_a': 'read', 'resource_b': 'write'});
 ```
 
+You can also employ an entirely promise based format by calling `wait`
+to get a promise that will be resolved when the required locks are
+available. The resolve value will be a function that must be called
+to release the locks.
+
+The basic form then becomes:
+
+```javascript
+resource_manager.wait(locks).then(function (release) {
+    // operation code here
+    release();
+    return resolve_val;
+});
+```
+
+This is a great simplification and involves no asynchronous behaviour.
+A suggested pattern is to break work into a first section, which does
+all work for which the locks are required, and latter sections where
+no (or different) locks are required, like this:
+
+```javascript
+resource_manager.wait(locks).then(function (release) {
+    // lock critical work here
+    release();
+    return some_val;
+}).then(function (resolved_some_val) {
+    // more work
+});
+```
+
+The asynchronous example above then becomes this:
+
+```javascript
+let polylock = require('polylock');
+
+let resource_manager = new polylock();
+
+resource_manager.wait(
+        {'resource_a': 'read', 'resource_b': 'write'}
+        ).then(function(release) {
+    // locks have been granted
+    console.log("starting operation");
+    return new Promise(function (timeout_fff) {
+        setTimeout(function () {
+            let retval = Math.floor(Math.random()*10);
+            console.log("finishing operation (returning "+retval+")");
+            // finish the operation
+            timeout_fff(retval);
+            release();
+            // locks are released
+        }, 1000);
+    });
+}).then(function (val) {
+    // operation has been finished
+    console.log("operation done, result was "+val);
+});
+```
+
+How you handle exceptions is now entirely up to you, don't forget a
+`catch` on all your promise chains!
+
 ## Client side usage
 
 The module works client side as well, the example above, without the

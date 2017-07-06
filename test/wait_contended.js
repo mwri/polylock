@@ -22,12 +22,15 @@ describe('100 contended operations', function() {
 
 		function mk_timed_op () {
 			results.push(
-				db.exec(function (fff) {
-					setTimeout(function () {
-						fff(data.num);
-					}, Math.floor(Math.random()*20));
-				}, {resource: 'read'})
-				);
+				db.wait({resource: 'read'}).then(function (release) {
+					return new Promise(function (timeout_fff) {
+						setTimeout(function () {
+							timeout_fff(data.num);
+							release();
+						}, Math.floor(Math.random()*20));
+					});
+				})
+			);
 		}
 
 		let results = [];
@@ -49,18 +52,20 @@ describe('100 contended operations', function() {
 	it('writing successful and data integrity is good', function(done) {
 
 		function mk_timed_op () {
-			results.push(db.exec(
-				function (fff) {
-					setTimeout(function () {
-						let num = data.num;
+			results.push(
+				db.wait({resource: 'write'}).then(function (release) {
+					return new Promise(function (timeout_fff) {
 						setTimeout(function () {
-							data.num = num+1;
-							fff(num+1);
+							let num = data.num;
+							setTimeout(function () {
+								data.num = num+1;
+								timeout_fff(num+1);
+								release();
+							}, Math.floor(Math.random()*20));
 						}, Math.floor(Math.random()*20));
-					}, Math.floor(Math.random()*20));
-				},
-				{resource: 'write'}
-				));
+					});
+				})
+			);
 		}
 
 		let results = [];

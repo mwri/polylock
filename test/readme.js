@@ -152,4 +152,36 @@ describe('readme (sync example)', function() {
 });
 
 
+describe('readme (all promises example)', function() {
+
+	it('works', function (test_done) {
+
+		let resource_manager = new polylock();
+
+		resource_manager.wait(
+				{'resource_a': 'read', 'resource_b': 'write'}
+				).then(function(release) {
+			// locks have been granted
+			console.log("starting operation");
+			return new Promise(function (timeout_fff) {
+				setTimeout(function () {
+					let retval = Math.floor(Math.random()*10);
+					console.log("finishing operation (returning "+retval+")");
+					// finish the operation
+					timeout_fff(retval);
+					release();
+					// locks are released
+				}, 1000);
+			});
+		}).then(function (val) {
+			// operation has been finished
+			console.log("operation done, result was "+val);
+			test_done();
+		}); 
+
+	});
+
+});
+
+
 })();

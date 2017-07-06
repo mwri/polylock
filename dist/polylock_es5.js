@@ -1,6 +1,6 @@
 'use strict';
 
-// Package: polylock v1.0.4 (built 2017-07-06 18:50:53)
+// Package: polylock v1.0.5 (built 2017-07-06 23:57:23)
 // Copyright: (C) 2017 Michael Wright <mjw@methodanalysis.com>
 // License: MIT
 
@@ -73,6 +73,25 @@
 				this_polylock.yield_locks(locks);
 				this_polylock.run_queue();
 				return retval;
+			});
+		};
+
+		/**
+   * Wait for the required locks. Returns a promise that will be resolved
+   * when the locks are available.
+   *
+   * The promise resolves to a function which must be called to release
+   * the locks granted.
+   */
+
+		polylock.prototype.wait = function (locks) {
+
+			var this_polylock = this;
+
+			return new Promise(function (caller_fff) {
+				this_polylock.exec(function (op_fff, op_rej) {
+					caller_fff(op_fff);
+				}, locks);
 			});
 		};
 
