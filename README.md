@@ -47,6 +47,7 @@ let prom = resource_manager.exec(function (done, fail) {
         console.log("finishing operation (returning "+retval+")");
         // finish the operation
         done(retval);
+        // locks are released
     }, 1000);
 }, {'resource_a': 'read', 'resource_b': 'write'});
 
@@ -61,6 +62,20 @@ prom.then(function (val) {
 Whilst this operation is in progress other operations that require a
 **resource_a** read lock may run, but none that require a read or write
 lock for **resource_b**.
+
+If your operation is purely synchronous if can accept no arguments
+and return the result instead, like this:
+
+```javascript
+let prom = resource_manager.exec(function () {
+    // locks have been granted
+    console.log("starting operation");
+    let retval = Math.floor(Math.random()*10);
+    console.log("finishing operation (returning "+retval+")");
+    return retval;
+    // locks are released
+}, {'resource_a': 'read', 'resource_b': 'write'});
+```
 
 ## Client side usage
 

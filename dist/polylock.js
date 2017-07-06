@@ -1,4 +1,4 @@
-// Package: polylock v1.0.3 (built 2017-07-03 15:03:36)
+// Package: polylock v1.0.4 (built 2017-07-06 18:50:53)
 // Copyright: (C) 2017 Michael Wright <mjw@methodanalysis.com>
 // License: MIT
 
@@ -271,7 +271,11 @@ let polylock = (function() {
 				if (op_data.op_res)
 					this.yield_reservations(op_data.locks);
 				this.take_locks(op_data.locks);
-				op_data.op_fun(op_data.op_fff, op_data.op_rej);
+				if (op_data.op_fun.length === 0) {
+					op_data.op_fff(op_data.op_fun());
+				} else {
+					op_data.op_fun(op_data.op_fff, op_data.op_rej);
+				}
 				this.queue.remove(node);
 			}
 		}
