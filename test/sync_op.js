@@ -24,7 +24,7 @@ describe('synchronous read operation (accepts no args)', function() {
 			return data.num;
 		}, {resource: 'read'});
 
-		prom.then(function (result) {
+		return prom.then(function (result) {
 			expect(result).toBe(10);
 		});
 
@@ -35,17 +35,17 @@ describe('synchronous read operation (accepts no args)', function() {
 
 describe('synchronous write operation (accepts no args)', function() {
 
-	let db   = new polylock();
-	let data = { num: 10 };
-
 	it('returns result correctly', function() {
+
+		let db   = new polylock();
+		let data = { num: 10 };
 
 		let prom = db.exec(function () {
 			data.num++;
 			return data.num;
 		}, {resource: 'write'});
 
-		prom.then(function (result) {
+		return prom.then(function (result) {
 			expect(result).toBe(11);
 		});
 
@@ -53,13 +53,25 @@ describe('synchronous write operation (accepts no args)', function() {
 
 	it('runs (again) and returns result correctly', function() {
 
+		let db   = new polylock();
+		let data = { num: 10 };
+
 		let prom = db.exec(function () {
 			data.num++;
 			return data.num;
 		}, {resource: 'write'});
 
-		prom.then(function (result) {
-			expect(result).toBe(12);
+		return prom.then(function (result) {
+			expect(result).toBe(11);
+		}).then(function () {
+			let prom = db.exec(function () {
+				data.num++;
+				return data.num;
+			}, {resource: 'write'});
+
+			return prom.then(function (result) {
+				expect(result).toBe(12);
+			});
 		});
 
 	});

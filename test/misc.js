@@ -15,9 +15,9 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
 
 describe('taking locks', function() {
 
-	let db = new polylock();
-
 	it('returns true when first available', function() {
+
+		let db = new polylock();
 
 		let take_result = db.take_locks({resource: 'write'});
 
@@ -27,9 +27,10 @@ describe('taking locks', function() {
 
 	it('returns false when not available', function() {
 
-		let take_result = db.take_locks({resource: 'write'});
+		let db = new polylock();
 
-		expect(take_result).toEqual(false);
+		expect(db.take_locks({resource: 'write'})).toEqual(true);
+		expect(db.take_locks({resource: 'write'})).toEqual(false);
 
 	});
 

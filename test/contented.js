@@ -15,10 +15,10 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
 
 describe('100 contended operations', function() {
 
-	let db   = new polylock();
-	let data = { num: 10 };
+	it('reads successful', function() {
 
-	it('reads successful', function(done) {
+		let db   = new polylock();
+		let data = { num: 10 };
 
 		function mk_timed_op () {
 			results.push(
@@ -35,18 +35,18 @@ describe('100 contended operations', function() {
 			mk_timed_op();
 		}
 
-		Promise.all(results).then(function (resolved_results) {
+		return Promise.all(results).then(function (resolved_results) {
 			for (let i = 0; i < 100; i++) {
 				expect(resolved_results[i]).toBe(10);
 			}
-			done();
-		}).catch(function (err) {
-			done.fail(err);
 		});
 
 	});
 
-	it('writing successful and data integrity is good', function(done) {
+	it('writing successful and data integrity is good', function() {
+
+		let db   = new polylock();
+		let data = { num: 10 };
 
 		function mk_timed_op () {
 			results.push(db.exec(
@@ -68,12 +68,11 @@ describe('100 contended operations', function() {
 			mk_timed_op();
 		}
 
-		Promise.all(results).then(function (results2) {
+		return Promise.all(results).then(function (results2) {
 			results2.sort(function (a, b) { return a - b; });
 			for (let i = 0; i < results2.length; i++) {
 				expect(results2[i]).toBe(i+11);
 			}
-			done();
 		});
 
 	});

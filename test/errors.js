@@ -116,7 +116,7 @@ describe('operation crashing', function() {
 	it('results in promise rejection', function(done) {
 
 		let op_prom = db.exec(function (fff, rej) {
-			fff(10/0);
+			throw new Error('badness');
 		}, {});
 
 		op_prom.then(function () {
