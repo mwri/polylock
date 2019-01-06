@@ -65,6 +65,11 @@ module.exports = function(grunt) {
 					browsers:    ['ChromeHeadless'],
 					reporters:     ['spec'],
 					concurrency: Infinity,
+					client: {
+						jasmine: {
+							random: false,
+						}
+					},
 				},
 			},
 			es6: {
@@ -89,6 +94,11 @@ module.exports = function(grunt) {
 						type : 'lcov',
 						subdir: 'karma/',
 					},
+					client: {
+						jasmine: {
+							random: false,
+						}
+					},
 				},
 			},
 			travis_ci_es5: {
@@ -108,6 +118,11 @@ module.exports = function(grunt) {
 					browsers:    ['ChromeTravisCI'],
 					reporters:     ['spec'],
 					concurrency: Infinity,
+					client: {
+						jasmine: {
+							random: false,
+						}
+					},
 					customLaunchers: {
 						ChromeTravisCI: {
 							base:  'Chrome',
@@ -134,6 +149,11 @@ module.exports = function(grunt) {
 					reporters:     ['spec', 'coverage'],
 					preprocessors: { 'dist/polylock.js': ['coverage'] },
 					concurrency: Infinity,
+					client: {
+						jasmine: {
+							random: false,
+						}
+					},
 					coverageReporter: {
 						type:   'lcovonly',
 						file:   'lcov.info',
