@@ -198,14 +198,3 @@ will decrease.
 The 'max concurrent' figure is the maximum number of operations
 running in parallel during the test, and sometimes write priority
 results in higher peaks, sometimes lower.
-
-## Build
-
-run `npm install` to install the dev/build dependencies, and
-`grunt build` to build.
-
-This will create ES5 `dist/polylock.js` and `dist/polylock.min.js`
-files, and run the unit tests against them.
-
-Running `grunt watch` will invoke a continuous file watch build test
-cycle and generate (ES6) coverage reports.

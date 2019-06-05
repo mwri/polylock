@@ -4,13 +4,8 @@
 "use strict";
 
 
-let polylock;
-if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
-	polylock = require('./../dist/polylock.js');
-	require('chai-jasmine');
-} else {
-	polylock = window.polylock;
-}
+let polylock = require('./../lib/polylock.js');
+let chai_jasmine = require('chai-jasmine');
 
 
 describe('operations with read vs write priority (read draining for write)', function() {

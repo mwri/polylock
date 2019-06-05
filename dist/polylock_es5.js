@@ -1,6 +1,6 @@
 'use strict';
 
-// Package: polylock v1.0.5 (built 2017-07-06 23:57:23)
+// Package: polylock v1.0.5 (built 2019-01-06 20:47:19)
 // Copyright: (C) 2017 Michael Wright <mjw@methodanalysis.com>
 // License: MIT
 
