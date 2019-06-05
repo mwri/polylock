@@ -143,16 +143,6 @@ How you handle exceptions is now entirely up to you, don't forget a
 The module works client side as well, the example above, without the
 `let polylock = require('polylock');` will work in a web browser fine.
 
-## ES5, ES6 and minification
-
-The `dist` folder has the following files available:
-
-File | Description
-:-- | :--
-polylock.js | Limited ES6 features (works with Node.js v4+ and most browsers)
-polylock_es5.js | ES5 translation (should work with anything)
-polylock_es5.min.js | Minified ES5 translation
-
 ## Resource contention
 
 There is no limit to the number of resources that may be locked at
