@@ -33,7 +33,7 @@ function critical_section (descr) {
     return new Promise((resolve) => {
         setTimeout(
             function () {
-                resolve(Math.floor(Math.random() * 100)),
+                resolve(Math.floor(Math.random() * 100));
                 console.log(`${ts()}\tCOMMIT\t${descr}\tfinished async operation`);
             },
             1000 + Math.floor(Math.random() * 1000)

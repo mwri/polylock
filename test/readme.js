@@ -164,41 +164,41 @@ describe('readme', function () {
             let resource_manager = new polylock();
             let start_ms = (new Date()).getTime();
 
-            console.log(`${new Date()}  waiting A`);
+            //console.log(`${new Date()}  waiting A`);
             let a = resource_manager
                 .wait({'resource_a': 'write'})
                 .then((release) => {
-                    console.log(`${new Date()}  begin A`);
+                    //console.log(`${new Date()}  begin A`);
                     return new Promise((resolve) => {
                         setTimeout(resolve, 200);
                     }).then(() => {
-                        console.log(`${new Date()}  end A`);
+                        //console.log(`${new Date()}  end A`);
                         release();
                     });
                 });
 
-            console.log(`${new Date()}  waiting B`);
+            //console.log(`${new Date()}  waiting B`);
             let b = resource_manager
                 .wait({'resource_a': 'write'})
                 .then((release) => {
-                    console.log(`${new Date()}  begin B`);
+                    //console.log(`${new Date()}  begin B`);
                     return new Promise((resolve) => {
                         setTimeout(resolve, 200);
                     }).then(() => {
-                        console.log(`${new Date()}  end B`);
+                        //console.log(`${new Date()}  end B`);
                         release();
                     });
                 });
 
-            console.log(`${new Date()}  waiting C`);
+            //console.log(`${new Date()}  waiting C`);
             let c = resource_manager
                 .wait({'resource_a': 'write'})
                 .then((release) => {
-                    console.log(`${new Date()}  begin C`);
+                    //console.log(`${new Date()}  begin C`);
                     return new Promise((resolve) => {
                         setTimeout(resolve, 200);
                     }).then(() => {
-                        console.log(`${new Date()}  end C`);
+                        //console.log(`${new Date()}  end C`);
                         release();
                     });
                 });
@@ -220,18 +220,18 @@ describe('readme', function () {
                 contended({'resource_a': 'read',  'resource_d': 'write'}, 'A_read_D_write_5'),
                 contended({'resource_a': 'write', 'resource_e': 'read' }, 'A_write_E_read_6'),
             ]).then((results) => {
-                console.log(results);
+                //console.log(results);
             });
 
             function contended (locks, descr) {
-                console.log(`${ts()}\tWAIT\t${descr}\twaiting for locks`);
+                //console.log(`${ts()}\tWAIT\t${descr}\twaiting for locks`);
                 return resource_manager
                     .wait(locks)
                     .then((release) => {
-                        console.log(`${ts()}\tGRANT\t${descr}\tlocks granted, starting critical section`);
+                        //console.log(`${ts()}\tGRANT\t${descr}\tlocks granted, starting critical section`);
                         return critical_section(descr)
                             .then((retval) => {
-                                console.log(`${ts()}\tRELEASE\t${descr}\tlocks granted, starting critical section`);
+                                //console.log(`${ts()}\tRELEASE\t${descr}\tlocks granted, starting critical section`);
                                 release();
                                 return retval;
                             });
@@ -239,12 +239,12 @@ describe('readme', function () {
             }
 
             function critical_section (descr) {
-                console.log(`${ts()}\tBEGIN\t${descr}\tstarting async operation`);
+                //console.log(`${ts()}\tBEGIN\t${descr}\tstarting async operation`);
                 return new Promise((resolve) => {
                     setTimeout(
                         function () {
-                            resolve(Math.floor(Math.random() * 100)),
-                            console.log(`${ts()}\tCOMMIT\t${descr}\tfinished async operation`);
+                            resolve(Math.floor(Math.random() * 100));
+                            //console.log(`${ts()}\tCOMMIT\t${descr}\tfinished async operation`);
                         },
                         100 + Math.floor(Math.random() * 100)
                     );
@@ -268,11 +268,11 @@ describe('readme', function () {
             let start_ms = (new Date()).getTime();
 
             async function contend (op) {
-                console.log(`${new Date()}  waiting ${op}`);
+                //console.log(`${new Date()}  waiting ${op}`);
                 let release = await resource_manager.wait({'resource_a': 'write'});
-                console.log(`${new Date()}  begin A`);
+                //console.log(`${new Date()}  begin A`);
                 await new Promise((resolve) => setTimeout(resolve, 200));
-                console.log(`${new Date()}  end A`);
+                //console.log(`${new Date()}  end A`);
                 release();
             }
 
@@ -297,23 +297,23 @@ describe('readme', function () {
                 contended({'resource_a': 'read',  'resource_d': 'write'}, 'A_read_D_write_5'),
                 contended({'resource_a': 'write', 'resource_e': 'read' }, 'A_write_E_read_6'),
             ]).then((results) => {
-                console.log(results);
+                //console.log(results);
             });
 
             async function contended (locks, descr) {
-                console.log(`${ts()}\tWAIT\t${descr}\twaiting for locks`);
+                //console.log(`${ts()}\tWAIT\t${descr}\twaiting for locks`);
                 let release = await resource_manager.wait(locks);
-                console.log(`${ts()}\tGRANT\t${descr}\tlocks granted, starting critical section`);
+                //console.log(`${ts()}\tGRANT\t${descr}\tlocks granted, starting critical section`);
                 let result = await critical_section(descr);
-                console.log(`${ts()}\tRELEASE\t${descr}\tlocks granted, starting critical section`);
+                //console.log(`${ts()}\tRELEASE\t${descr}\tlocks granted, starting critical section`);
                 release();
                 return result;
             }
 
             async function critical_section (descr) {
-                console.log(`${ts()}\tBEGIN\t${descr}\tstarting async operation`);
+                //console.log(`${ts()}\tBEGIN\t${descr}\tstarting async operation`);
                 await new Promise((resolve) => setTimeout(resolve, 100 + Math.floor(Math.random() * 100)));
-                console.log(`${ts()}\tCOMMIT\t${descr}\tfinished async operation`);
+                //console.log(`${ts()}\tCOMMIT\t${descr}\tfinished async operation`);
                 return {
                     'operation': descr,
                     'result':    Math.floor(Math.random() * 100),
@@ -331,36 +331,36 @@ describe('readme', function () {
             let resource_manager = new polylock();
             let start_ms = (new Date()).getTime();
 
-            console.log(`${new Date()}  waiting A`);
+            //console.log(`${new Date()}  waiting A`);
             let a = resource_manager.exec(
                 function (done, fail) {
-                    console.log(`${new Date()}  begin A`);
+                    //console.log(`${new Date()}  begin A`);
                     setTimeout(function () {
-                        console.log(`${new Date()}  end A`);
+                        //console.log(`${new Date()}  end A`);
                         done();
                     }, 200);
                 },
                 {'resource_a': 'write'}
             );
 
-            console.log(`${new Date()}  waiting B`);
+            //console.log(`${new Date()}  waiting B`);
             let b = resource_manager.exec(
                 function (done, fail) {
-                    console.log(`${new Date()}  begin B`);
+                    //console.log(`${new Date()}  begin B`);
                     setTimeout(function () {
-                        console.log(`${new Date()}  end B`);
+                        //console.log(`${new Date()}  end B`);
                         done();
                     }, 200);
                 },
                 {'resource_a': 'write'}
             );
 
-            console.log(`${new Date()}  waiting C`);
+            //console.log(`${new Date()}  waiting C`);
             let c = resource_manager.exec(
                 function (done, fail) {
-                    console.log(`${new Date()}  begin C`);
+                    //console.log(`${new Date()}  begin C`);
                     setTimeout(function () {
-                        console.log(`${new Date()}  end C`);
+                        //console.log(`${new Date()}  end C`);
                         done();
                     }, 200);
                 },
@@ -386,22 +386,22 @@ describe('readme', function () {
             return Promise.all([a, b, c, d, e, f]);
 
             function contended (locks, descr) {
-                console.log(`${ts()}\tWAIT\t${descr}\twaiting for locks`);
+                //console.log(`${ts()}\tWAIT\t${descr}\twaiting for locks`);
                 return resource_manager.exec(critical_section.bind(undefined, descr), locks);
             }
 
             function critical_section (descr, done, fail) {
-                console.log(`${ts()}\tGRANT\t${descr}\tlocks granted, starting critical section`);
-                console.log(`${ts()}\tBEGIN\t${descr}\tstarting async operation`);
+                //console.log(`${ts()}\tGRANT\t${descr}\tlocks granted, starting critical section`);
+                //console.log(`${ts()}\tBEGIN\t${descr}\tstarting async operation`);
                 setTimeout(
                     function () {
-                        console.log(`${ts()}\tCOMMIT\t${descr}\tfinished async operation`);
-                        console.log({
-                            'operation': descr,
-                            'result':    Math.floor(Math.random() * 100),
-                        });
+                        //console.log(`${ts()}\tCOMMIT\t${descr}\tfinished async operation`);
+                        //console.log({
+                        //    'operation': descr,
+                        //    'result':    Math.floor(Math.random() * 100),
+                        //});
                         done();
-                        console.log(`${ts()}\tRELEASE\t${descr}\treturning, locks will be released`);
+                        //console.log(`${ts()}\tRELEASE\t${descr}\treturning, locks will be released`);
                     },
                     100 + Math.floor(Math.random() * 100)
                 );
