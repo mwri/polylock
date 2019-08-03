@@ -8,11 +8,6 @@
   },
   "description": "polylock (multiple resource locking)",
   "devDependencies": {
-    "@babel/cli": "^7.4.4",
-    "@babel/core": "^7.4.5",
-    "@babel/node": "^7.4.5",
-    "@babel/preset-env": "^7.4.5",
-    "@babel/register": "^7.4.4",
     "chai-jasmine": "^2.0.3",
     "coveralls": "^3.0.3",
     "grunt": "^1.0.4",
@@ -28,10 +23,10 @@
   ],
   "scripts": {
     "prepublishOnly": "./node_modules/grunt-cli/bin/grunt prepublish",
-    "test": "./node_modules/.bin/mocha --timeout 4000 --require @babel/register",
-    "coverage": "./node_modules/.bin/nyc --reporter=html --reporter=text --reporter=lcov ./node_modules/.bin/mocha --timeout 4000 --require @babel/register"
+    "test": "./node_modules/.bin/mocha --timeout 4000",
+    "coverage": "./node_modules/.bin/nyc --reporter=html --reporter=text --reporter=lcov ./node_modules/.bin/mocha --timeout 4000"
   },
-  "main": "lib/polylock.js",
+  "main": "lib/index.js",
   "directories": {
     "lib": "lib",
     "test": "test"
